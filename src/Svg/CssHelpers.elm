@@ -1,17 +1,16 @@
-module Html.CssHelpers exposing (withNamespace, style, stylesheetLink, Namespace, Helpers)
+module Svg.CssHelpers exposing (withNamespace, Namespace, Helpers)
 
-{-| Helper functions for using elm-css with elm-html.
+{-| Helper functions for using elm-css with elm-svg.
 
-@docs withNamespace, style, stylesheetLink
+@docs withNamespace
 
 @docs Helpers, Namespace
 -}
 
 import Css.Helpers exposing (toCssIdentifier, identifierToString)
-import Html exposing (Attribute, Html)
-import Html.Attributes as Attr
+import Svg exposing (Attribute, Svg)
+import Svg.Attributes as Attr
 import String
-import Json.Encode exposing (string)
 
 
 {-| Helpers for working on a given class/id
@@ -34,7 +33,7 @@ type alias Namespace name class id msg =
 
 
 {-| Takes a namespace and returns helper functions for `id`, `class`, and
-`classList` which work just like their equivalents in `elm-html` except that
+`classList` which work just like their equivalents in `elm-svg` except that
 they accept union types and automatically incorporate the given namespace. Also
 note that `class` accepts a `List` instead of a single element; this is so you
 can specify multiple classes without having to call `classList` passing tuples
@@ -44,7 +43,7 @@ that all end in `True`.
     { id, class, classList } = withNamespace "homepage"
 
     view =
-        h1 [ id Hero, class [ Fancy ] ] [ text "Hello, World!" ]
+        svg [ id Graphic, class [ Fancy ] ] [ text "Hello, World!" ]
 
     type HomepageIds = Hero | SomethingElse | AnotherId
     type HomepageClasses = Fancy | AnotherClass | SomeOtherClass
@@ -98,25 +97,3 @@ class : List class -> Attribute msg
 class =
     namespacedClass ""
 
-
-{-| Create an inline style from CSS
--}
-style : String -> Html msg
-style text =
-    Html.node "style"
-        [ Attr.property "textContent" <| string text
-        , Attr.property "type" <| string "text/css"
-        ]
-        []
-
-
-{-| Link in a stylesheet from a url
--}
-stylesheetLink : String -> Html msg
-stylesheetLink url =
-    Html.node "link"
-        [ Attr.property "rel" (string "stylesheet")
-        , Attr.property "type" (string "text/css")
-        , Attr.property "href" (string url)
-        ]
-        []
